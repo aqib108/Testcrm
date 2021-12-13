@@ -18,7 +18,7 @@ class EmployeeController extends Controller
     public function index()
     {
       
-        $employees = $this->model->with('companies')->get();  
+        $employees = $this->model->with('companies')->paginate(3);  
          
         return response()->json($employees);
     }

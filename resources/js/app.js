@@ -48,6 +48,8 @@ const router = new VueRouter({
         routes,
         mode: 'history'
     })
+   
+    Vue.component('pagination', require('laravel-vue-pagination'));
     // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 const app = new Vue({

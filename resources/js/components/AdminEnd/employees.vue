@@ -8,13 +8,13 @@
                   <div class="card-body">
                     <h4 class="card-title">Employees</h4>
                     <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="display: none">
                      <input type="text" v-model="searchTerm" placeholder="Search Employee by Name" />
                     </div>
                     </div>
                    
                     <div class="table-responsive">
-                      <table class="table table-striped">
+                      <table class="table">
                         <thead>
                           <tr>
                             <th> # </th>
@@ -26,7 +26,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="(employee,idx) in filtersearch" :key="idx">
+                          <tr v-for="(employee,idx) in employees.data" :key="idx">
                             <td class="py-1"> {{idx+1 }} </td>
                             <td> {{employee.first_name +' '+ employee.last_name}}  </td>
                             <td> {{employee.email}} </td>
@@ -38,8 +38,14 @@
                           </td>
                           </tr>
                         </tbody>
+                        <tr>
+ <pagination :data="employees" @pagination-change-page="getdata"></pagination>
+                        </tr>
+                         
                       </table>
                     </div>
+                      
+                  
                     
                   </div>
                 </div>
@@ -63,16 +69,7 @@ data(){
       
           }
       },
-  computed:{
-    
-filtersearch()
-     {
-    
-        return this.employees.filter(employee =>{
-        return employee.first_name.toLowerCase().match(this.searchTerm.toLowerCase())
-        });
-     }
-  },
+ 
 methods:{
        deletedata(id)
       {
@@ -109,9 +106,14 @@ methods:{
 })
         
       },
-       getdata()
+       getdata(page)
       {
-          axios.get("/api/employee").then(response=>
+        if (typeof page === 'undefined') {
+                    page = 1;
+                }
+      
+               
+          axios.get("/api/employee?page="+page).then(response=>
           {
           this.employees = response.data;
           }).
